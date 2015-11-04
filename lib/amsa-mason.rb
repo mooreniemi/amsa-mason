@@ -1,30 +1,18 @@
 require "amsa-mason/version"
 require "active_model_serializers"
-require 'socket'
+require "socket"
 
 module AmsaMason
-  # First thing, your adapter should inherit from ActiveModel::Serializer::Adapter::Base. Then you mainly have to define one method: serializable_hash (and possibly fragment_cache in case you want to support fragment caching, but let's get into this later).
   class Adapter < ::ActiveModel::Serializer::Adapter::Base
     def serializable_hash(*)
-      # as you can see here: https://github.com/rails-api/active_model_serializers/blob/master/lib/active_model/serializer/adapter/base.rb#L12
-      # your adapter instance will be provided with an instance of a serializer (for the root object/collection), and some options (`instance_options`)
-      # + serializer.object will be the root object/collection,
-      # + serializer.attributes will be the list of key/value for the attributes you are supposed to serialize
-      # + serializer.associations will be the list of associations (key is the name, value is a serializer instance for the related resource)
-      # your adapter's role will be to turn all that into a hash that represents the JSON document you want to output
       serializer.
         attributes.
-        merge!(additional_properties).
         merge!(relations).
+        merge!(additional_properties).
         to_json
     end
 
     private
-    def additional_properties
-      {
-        "@controls" => controls
-      }
-    end
     def relations
       serializer.associations.inject({}) do |relation_hash, association|
         relation_hash.merge!(
@@ -33,6 +21,11 @@ module AmsaMason
           }
         )
       end
+    end
+    def additional_properties
+      {
+        "@controls" => controls
+      }
     end
     def controls
       {
@@ -59,15 +52,11 @@ module AmsaMason
         )
       }
     end
-    def get_url_for(action)
-      maybe_id = action != 'add' ? "/#{serializer.object.id}" : ""
-      "#{hostname}/#{resource_name_of(serializer.object)}" + maybe_id
-    end
     def objects_of(association)
       serializer.object.send(association.name.to_sym).inject([]) do |array_of_objects, associated_object|
-        associated_serializer = (associated_object.class.to_s + "Serializer").constantize
         array_of_objects << (
-          associated_serializer.new(associated_object).attributes.merge!(
+          # add controls to each associated object
+          serializer_of(associated_object).new(associated_object).attributes.merge!(
             {
               "@controls" => {
                 self:
@@ -88,6 +77,13 @@ module AmsaMason
     end
     def parent_name
       resource_name_of(serializer.object.parent)
+    end
+    def serializer_of(associated_object)
+      (associated_object.class.to_s + "Serializer").constantize
+    end
+    def get_url_for(action)
+      maybe_id = action != 'add' ? "/#{serializer.object.id}" : ""
+      "#{hostname}/#{resource_name_of(serializer.object)}" + maybe_id
     end
   end
 end

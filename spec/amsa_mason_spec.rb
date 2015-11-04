@@ -37,22 +37,24 @@ describe AmsaMason do
     expect(AmsaMason::Adapter.new(serializer)).to be_a AmsaMason::Adapter
   end
 
-  it 'serializes Mason correctly' do
-    allow_any_instance_of(AmsaMason::IssueSerializer).to receive(:templates).and_return([])
-    adapter = AmsaMason::Adapter.new(serializer)
-    expect(JSON.parse(adapter.as_json)).to eq(parsed_mason)
-  end
-
-  describe 'smaller units of the Mason spec' do
+  describe 'without is: actions/templates' do
+    before(:each) do
+      allow_any_instance_of(AmsaMason::IssueSerializer).
+        to receive(:templates).and_return([])
+    end
     it 'adds appropriate controls' do
-      allow_any_instance_of(AmsaMason::IssueSerializer).to receive(:templates).and_return([])
       parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
       expect(parsed_json['@controls']).to eq(parsed_mason['@controls'])
     end
-    it 'adds is relations' do
-      parsed_is_mason = JSON.parse(File.read('spec/support/mason_is.json'))
-      parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
-      expect(parsed_json).to eq(parsed_is_mason)
+    it 'serializes Mason correctly' do
+      adapter = AmsaMason::Adapter.new(serializer)
+      expect(JSON.parse(adapter.as_json)).to eq(parsed_mason)
     end
+  end
+
+  it 'adds is: relations' do
+    parsed_is_mason = JSON.parse(File.read('spec/support/mason_is.json'))
+    parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
+    expect(parsed_json).to eq(parsed_is_mason)
   end
 end

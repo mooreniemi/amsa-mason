@@ -47,7 +47,7 @@ module AmsaMason
     end
     def objects_of(association)
       serializer.object.send(association.name.to_sym).inject([]) do |array_of_objects, associated_object|
-        associated_serializer = AmsaMason::AttachmentSerializer
+        associated_serializer = (associated_object.class.to_s + "Serializer").constantize
         array_of_objects << (
           associated_serializer.new(associated_object).attributes.merge!(
             {

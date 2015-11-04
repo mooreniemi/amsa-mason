@@ -42,8 +42,15 @@ describe AmsaMason do
     expect(JSON.parse(adapter.as_json)).to eq(parsed_mason)
   end
 
-  it 'adds appropriate controls' do
-    parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
-    expect(parsed_json['@controls']).to eq(parsed_mason['@controls'])
+  describe 'smaller units of the Mason spec' do
+    it 'adds appropriate controls' do
+      parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
+      expect(parsed_json['@controls']).to eq(parsed_mason['@controls'])
+    end
+    it 'adds is relations' do
+      parsed_is_mason = JSON.parse(File.read('spec/support/mason_is.json'))
+      parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
+      expect(parsed_json).to eq(parsed_is_mason)
+    end
   end
 end

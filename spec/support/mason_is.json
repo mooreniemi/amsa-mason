@@ -1,0 +1,36 @@
+{
+  "id": 1,
+  "title": "Program crashes when pressing ctrl-p",
+  "description": "I pressed ctrl-p and, boom, it crashed.",
+  "severity": 5,
+  "attachments": [
+    {
+      "id": 1,
+      "title": "Error report",
+      "@controls": {
+        "self": {
+          "href": "http://issue-tracker.org/attachments/1"
+        }
+      }
+    }
+  ],
+  "@controls": {
+    "self": {
+      "href": "http://issue-tracker.org/issues/1"
+    },
+    "up": {
+      "href": "http://issue-tracker.org/projects/1",
+      "title": "Containing project"
+    },
+    "is:add-issue": {
+      "type": "json",
+      "href": "http://issue-tracker.org/issues",
+      "schemaUrl": "https://bib.schema.org/ComicIssue"
+    },
+    "is:delete-issue": {
+      "type": "void",
+      "href": "http://issue-tracker.org/issues/1",
+      "method": "DELETE"
+    }
+  }
+}

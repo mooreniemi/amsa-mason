@@ -43,6 +43,21 @@ module AmsaMason
           href: "#{hostname}/#{parent_name}/#{serializer.object.parent.id}",
           title: serializer.object.parent.title
         }
+      }.merge!(templates)
+    end
+    def templates
+      serializer.templates.inject({}) do |templated, template_params|
+        templated.merge!(template(template_params))
+      end
+    end
+    def template(template_params)
+      {
+        "is:#{template_params[:name]}" => {
+          type: "#{template_params[:type]}",
+          href: "#{template_params[:href]}",
+          schemaUrl: "#{template_params[:schemaUrl]}",
+          method: "#{template_params[:method]}"
+        }
       }
     end
     def objects_of(association)

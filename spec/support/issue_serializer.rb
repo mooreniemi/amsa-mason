@@ -7,12 +7,15 @@ module AmsaMason
     def templates
       [
         {
-          name: "add-issue",
+          # action-resource
+          name: "add",
+          # type is the response body type
           type: "json",
-          schemaUrl: "https://bib.schema.org/ComicIssue"
+          schemaUrl: "https://bib.schema.org/ComicIssue",
+          method: "POST"
         },
         {
-          name: "delete-issue",
+          name: "delete",
           type: "void",
           method: "DELETE"
         }

@@ -52,13 +52,16 @@ module AmsaMason
     end
     def template(template_params)
       {
-        "is:#{template_params[:name]}" => {
-          type: "#{template_params[:type]}",
-          href: "#{template_params[:href]}",
-          schemaUrl: "#{template_params[:schemaUrl]}",
-          method: "#{template_params[:method]}"
-        }
+        "is:#{template_params[:name]}-#{resource_name_of(serializer.object).singularize}" => template_params.except(:name).merge!(
+          {
+            href: get_url_for(template_params[:name])
+          }
+        )
       }
+    end
+    def get_url_for(action)
+      maybe_id = action != 'add' ? "/#{serializer.object.id}" : ""
+      "#{hostname}/#{resource_name_of(serializer.object)}" + maybe_id
     end
     def objects_of(association)
       serializer.object.send(association.name.to_sym).inject([]) do |array_of_objects, associated_object|

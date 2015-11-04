@@ -25,7 +25,8 @@
     "is:add-issue": {
       "type": "json",
       "href": "http://issue-tracker.org/issues",
-      "schemaUrl": "https://bib.schema.org/ComicIssue"
+      "schemaUrl": "https://bib.schema.org/ComicIssue",
+      "method": "POST"
     },
     "is:delete-issue": {
       "type": "void",

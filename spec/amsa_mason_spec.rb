@@ -38,12 +38,14 @@ describe AmsaMason do
   end
 
   it 'serializes Mason correctly' do
+    allow_any_instance_of(AmsaMason::IssueSerializer).to receive(:templates).and_return([])
     adapter = AmsaMason::Adapter.new(serializer)
     expect(JSON.parse(adapter.as_json)).to eq(parsed_mason)
   end
 
   describe 'smaller units of the Mason spec' do
     it 'adds appropriate controls' do
+      allow_any_instance_of(AmsaMason::IssueSerializer).to receive(:templates).and_return([])
       parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
       expect(parsed_json['@controls']).to eq(parsed_mason['@controls'])
     end

@@ -10,7 +10,23 @@ describe AmsaMason do
   let(:parsed_mason) do
     JSON.parse(File.read('spec/support/mason.json'))
   end
-  let(:model) { AmsaMason::ResourceModel.new(title: "Title") }
+  let(:mason_as_hash) do
+    {
+      id: 1,
+      title: "Program crashes when pressing ctrl-p",
+      description: "I pressed ctrl-p and, boom, it crashed.",
+      severity: 5,
+      attachments: [
+        id: 1,
+        title: "Error report"
+      ]
+    }
+  end
+  let(:model) do
+    AmsaMason::ResourceModel.new(
+      mason_as_hash
+    )
+  end
   let(:serializer) { AmsaMason::ResourceSerializer.new(model) }
 
   it 'defines an Adapter' do

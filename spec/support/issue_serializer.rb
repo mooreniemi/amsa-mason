@@ -1,7 +1,7 @@
 require 'active_model_serializers'
 module AmsaMason
-  class ResourceSerializer < ::ActiveModel::Serializer
+  class IssueSerializer < ::ActiveModel::Serializer
     attributes :title, :description, :severity,
-      :attachments, :controls
+      :attachments
   end
 end

@@ -11,8 +11,19 @@ module AmsaMason
       # + serializer.attributes will be the list of key/value for the attributes you are supposed to serialize
       # + serializer.associations will be the list of associations (key is the name, value is a serializer instance for the related resource)
       # your adapter's role will be to turn all that into a hash that represents the JSON document you want to output
-      # Dummy example:
-      serializer.object.to_json # in case your root object supports the `to_h` method.
+      serializer.
+        attributes.
+        merge!(additional_properties).
+        to_json
+    end
+
+    private
+    def additional_properties
+      {
+        "@controls" => controls
+      }
+    end
+    def controls
     end
   end
 end

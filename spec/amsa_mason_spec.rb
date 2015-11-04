@@ -23,11 +23,11 @@ describe AmsaMason do
     }
   end
   let(:model) do
-    AmsaMason::ResourceModel.new(
+    AmsaMason::Issue.new(
       mason_as_hash
     )
   end
-  let(:serializer) { AmsaMason::ResourceSerializer.new(model) }
+  let(:serializer) { AmsaMason::IssueSerializer.new(model) }
 
   it 'defines an Adapter' do
     expect(AmsaMason::Adapter.new(serializer)).to be_a AmsaMason::Adapter

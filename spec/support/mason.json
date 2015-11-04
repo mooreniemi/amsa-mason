@@ -1,0 +1,26 @@
+{
+  "ID": 1,
+  "Title": "Program crashes when pressing ctrl-p",
+  "Description": "I pressed ctrl-p and, boom, it crashed.",
+  "Severity": 5,
+  "Attachments": [
+    {
+      "Id": 1,
+      "Title": "Error report",
+      "@controls": {
+        "self": {
+          "href": "http://issue-tracker.org/attachments/1"
+        }
+      }
+    }
+  ],
+  "@controls": {
+    "self": {
+      "href": "http://issue-tracker.org/issues/1"
+    },
+    "up": {
+      "href": "http://issue-tracker.org/projects/1",
+      "title": "Containing project"
+    }
+  }
+}

@@ -1,5 +1,6 @@
 require "amsa-mason/version"
 require "active_model_serializers"
+require 'socket'
 
 module AmsaMason
   # First thing, your adapter should inherit from ActiveModel::Serializer::Adapter::Base. Then you mainly have to define one method: serializable_hash (and possibly fragment_cache in case you want to support fragment caching, but let's get into this later).
@@ -14,6 +15,7 @@ module AmsaMason
       serializer.
         attributes.
         merge!(additional_properties).
+        merge!(relations).
         to_json
     end
 
@@ -23,7 +25,50 @@ module AmsaMason
         "@controls" => controls
       }
     end
+    def relations
+      serializer.associations.inject({}) do |relation_hash, association|
+        relation_hash.merge!(
+          {
+            association.name.to_sym => objects_of(association)
+          }
+        )
+      end
+    end
     def controls
+      {
+        self: {
+          href: "#{hostname}/#{resource_name_of(serializer.object)}/#{serializer.object.id}"
+        },
+        up: {
+          href: "#{hostname}/#{parent_name}/#{serializer.object.parent.id}",
+          title: serializer.object.parent.title
+        }
+      }
+    end
+    def objects_of(association)
+      serializer.object.send(association.name.to_sym).inject([]) do |array_of_objects, associated_object|
+        array_of_objects << (
+          AmsaMason::AttachmentSerializer.new(associated_object).attributes.merge!(
+            {
+              "@controls" => {
+                self:
+                {
+                  href: "#{hostname}/#{resource_name_of(associated_object)}/#{associated_object.id}"
+                }
+              }
+            }
+          )
+        )
+      end
+    end
+    def hostname
+      Socket.gethostname
+    end
+    def resource_name_of(object)
+      object.class.name.demodulize.tableize
+    end
+    def parent_name
+      resource_name_of(serializer.object.parent)
     end
   end
 end

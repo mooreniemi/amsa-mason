@@ -7,6 +7,10 @@ describe AmsaMason do
 end
 
 describe AmsaMason do
+  before(:each) do
+    allow(Socket).to receive(:gethostname).
+      and_return('http://issue-tracker.org')
+  end
   let(:parsed_mason) do
     JSON.parse(File.read('spec/support/mason.json'))
   end
@@ -36,5 +40,10 @@ describe AmsaMason do
   it 'serializes Mason correctly' do
     adapter = AmsaMason::Adapter.new(serializer)
     expect(JSON.parse(adapter.as_json)).to eq(parsed_mason)
+  end
+
+  it 'adds appropriate controls' do
+    parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
+    expect(parsed_json['@controls']).to eq(parsed_mason['@controls'])
   end
 end

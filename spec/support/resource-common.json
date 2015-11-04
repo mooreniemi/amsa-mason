@@ -1,0 +1,68 @@
+{
+  "@namespaces": {
+    "is": {
+      "name": "http://elfisk.dk/mason/issue-tracker/reltypes.html#"
+    }
+  },
+  "@meta": {
+    "@controls": {
+      "documentation": {
+        "title": "Documentation of Mason media type (hosted on GitHub).",
+        "href": "https://github.com/JornWildt/Mason"
+      }
+    },
+    "@title": "Common resource data for IssueTracker Demo",
+    "@description": "This resource contains common information for all resources (such as common links, implementation and owner details). [This application restarts in 14:59 minutes]"
+  },
+  "@controls": {
+    "self": {
+      "href": "http://mason-issue-tracker.azurewebsites.net/resource-common"
+    },
+    "is:contact": {
+      "title": "Contact information",
+      "description": "Complete contact information in standard formats such as vCard and jCard.",
+      "href": "http://mason-issue-tracker.azurewebsites.net/contact"
+    },
+    "is:logo": {
+      "href": "http://mason-issue-tracker.azurewebsites.net/Origins/JoeHacker/logo.png"
+    },
+    "is:projects": {
+      "title": "List all projects",
+      "href": "http://mason-issue-tracker.azurewebsites.net/projects"
+    },
+    "is:issue-query": {
+      "title": "Search for issues",
+      "description": "This is a simple search that do not check attachments.",
+      "href": "http://mason-issue-tracker.azurewebsites.net//issues-query?text={text}&severity={severity}&project={pid}",
+      "isHrefTemplate": true,
+      "schema": {
+        "properties": {
+          "text": {
+            "description": "Substring search for text in title and description",
+            "type": "string"
+          },
+          "severity": {
+            "description": "Issue severity (exact value, 1..5)",
+            "type": "string"
+          },
+          "pid": {
+            "description": "Project ID",
+            "type": "string"
+          }
+        }
+      }
+    },
+    "is:project-create": {
+      "title": "Create project",
+      "description": "Add new project to issue tracker.",
+      "encoding": "json",
+      "href": "http://mason-issue-tracker.azurewebsites.net/projects",
+      "method": "POST",
+      "schemaUrl": "http://mason-issue-tracker.azurewebsites.net/schemas/create-project"
+    },
+    "is:common": {
+      "title": "Common information shared by all resources",
+      "href": "http://mason-issue-tracker.azurewebsites.net/resource-common"
+    }
+  }
+}

@@ -52,9 +52,31 @@ describe AmsaMason do
     end
   end
 
-  it 'adds is: relations' do
+  it 'adds is: relations and templates' do
     parsed_is_mason = JSON.parse(File.read('spec/support/mason_is.json'))
     parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
     expect(parsed_json).to eq(parsed_is_mason)
+  end
+
+  describe 'using common resource document' do
+    let(:issue_tracker_root_parsed) do
+      JSON.parse(File.read('spec/support/resource-common.json'))
+    end
+    let(:parsed_json) do
+      JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
+    end
+
+    it 'adds meta information' do
+      expect(parsed_json['@meta']).to eq(issue_tracker_root_parsed['@meta'])
+    end
+    it 'removes meta when minimal is set' do
+      expect(parsed_json['@meta']).to be_nil
+    end
+    it 'adds namespaces' do
+      expect(parsed_json['@namespaces']).to eq(issue_tracker_root_parsed['@namespaces'])
+    end
+    it 'communicates schemas' do
+      expect(parsed_json).to eq(issue_tracker_root_parsed)
+    end
   end
 end

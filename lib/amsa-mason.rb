@@ -47,8 +47,9 @@ module AmsaMason
     end
     def objects_of(association)
       serializer.object.send(association.name.to_sym).inject([]) do |array_of_objects, associated_object|
+        associated_serializer = AmsaMason::AttachmentSerializer
         array_of_objects << (
-          AmsaMason::AttachmentSerializer.new(associated_object).attributes.merge!(
+          associated_serializer.new(associated_object).attributes.merge!(
             {
               "@controls" => {
                 self:

@@ -25,10 +25,8 @@ module AmsaMason
     end
     def additional_properties
       {
-        "@controls" => controls_and_maybe_templates
-      }.merge!(
-        app_profile_as_hash
-      )
+        "@controls" => controls
+      }.merge!(app_profile_as_hash)
     end
     def app_profile_as_hash
       full_profile = YAML.load(File.read('spec/support/api_profile.yml'))
@@ -37,7 +35,7 @@ module AmsaMason
       end
       full_profile
     end
-    def controls_and_maybe_templates
+    def controls
       {
         self: {
           href: "#{hostname}/#{resource_name_of(serializer.object)}/#{serializer.object.id}"
@@ -46,18 +44,18 @@ module AmsaMason
           href: "#{hostname}/#{parent_name}/#{serializer.object.parent.id}",
           title: serializer.object.parent.title
         }
-      }.merge!(templates)
+      }.merge!(actions)
     end
-    def templates
-      serializer.templates.inject({}) do |templated, template_params|
-        templated.merge!(template(template_params))
+    def actions
+      serializer.actions.inject({}) do |actions, action_params|
+        actions.merge!(action_template(action_params))
       end
     end
-    def template(template_params)
+    def action_template(params)
       {
-        "is:#{template_params[:name]}-#{resource_name_of(serializer.object).singularize}" => template_params.except(:name).merge!(
+        "is:#{params[:name]}-#{resource_name_of(serializer.object).singularize}" => params.except(:name).merge!(
           {
-            href: get_url_for(template_params[:name])
+            href: get_url_for(params[:name])
           }
         )
       }
@@ -92,7 +90,7 @@ module AmsaMason
       (associated_object.class.to_s + "Serializer").constantize
     end
     def get_url_for(action)
-      maybe_id = action != 'add' ? "/#{serializer.object.id}" : ""
+      maybe_id = action != "add" ? "/#{serializer.object.id}" : ""
       "#{hostname}/#{resource_name_of(serializer.object)}" + maybe_id
     end
   end

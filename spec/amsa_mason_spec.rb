@@ -49,7 +49,7 @@ describe AmsaMason do
         to receive(:instance_options).
         and_return({minimal: true})
       allow_any_instance_of(AmsaMason::IssueSerializer).
-        to receive(:templates).and_return([])
+        to receive(:actions).and_return([])
     end
     it 'adds appropriate controls' do
       parsed_json = JSON.parse(AmsaMason::Adapter.new(serializer).as_json)

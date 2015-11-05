@@ -4,7 +4,7 @@ module AmsaMason
     attributes :id, :title, :description, :severity
     has_many :attachments
 
-    def templates
+    def actions
       [
         {
           # action-resource

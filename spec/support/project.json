@@ -1,0 +1,22 @@
+{
+  "id": 1,
+  "title": "Project 1",
+  "@controls": {
+    "self": {
+      "href": "http://issue-tracker.org/projects/1"
+    },
+    "is:update-project": {
+      "type": "json",
+      "href": "http://issue-tracker.org/projects/1",
+      "title": "Update project details",
+      "method": "PUT",
+      "schemaUrl": "https://bib.schema.org/ComicIssue",
+      "template": {
+        "code": "SHOP",
+        "title": "Webshop",
+        "description": "All issues related to the webshop.",
+        "authToken": "jh987yfm16"
+      }
+    }
+  }
+}

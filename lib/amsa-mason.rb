@@ -39,12 +39,22 @@ module AmsaMason
       {
         self: {
           href: "#{hostname}/#{resource_name_of(serializer.object)}/#{serializer.object.id}"
-        },
-        up: {
-          href: "#{hostname}/#{parent_name}/#{serializer.object.parent.id}",
-          title: serializer.object.parent.title
         }
-      }.merge!(actions)
+      }.
+      merge!(actions).
+      merge!(up_unless_root)
+    end
+    def up_unless_root
+      if serializer.object.parent == :root
+        {}
+      else
+        {
+          up: {
+            href: "#{hostname}/#{parent_name}/#{serializer.object.parent.id}",
+            title: serializer.object.parent.title
+          }
+        }
+      end
     end
     def actions
       serializer.actions.inject({}) do |actions, action_params|

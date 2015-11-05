@@ -5,5 +5,12 @@ module AmsaMason
     include ::ActiveModel::Serialization
     attr_accessor :id, :title
 
+    def issues
+      []
+    end
+
+    def parent
+      :root
+    end
   end
 end

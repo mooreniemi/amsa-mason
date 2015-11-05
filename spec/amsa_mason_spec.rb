@@ -20,7 +20,7 @@ describe AmsaMason do
       }
     )
   end
-  let(:mason_as_hash) do
+  let(:issue_as_hash) do
     {
       id: 1,
       title: "Program crashes when pressing ctrl-p",
@@ -34,7 +34,7 @@ describe AmsaMason do
   end
   let(:model) do
     AmsaMason::Issue.new(
-      mason_as_hash
+      issue_as_hash
     )
   end
   let(:serializer) { AmsaMason::IssueSerializer.new(model) }
@@ -89,6 +89,31 @@ describe AmsaMason do
     end
     it 'communicates schemas' do
       expect(parsed_json).to eq(issue_tracker_root_parsed)
+    end
+  end
+
+  describe 'project with template in update action' do
+    let(:project_as_hash) do
+      {
+        id: 1,
+        title: "Project 1"
+      }
+    end
+    let(:model) do
+      AmsaMason::Project.new(
+        project_as_hash
+      )
+    end
+    let(:serializer) { AmsaMason::ProjectSerializer.new(model) }
+    let(:action_with_template) do
+      JSON.parse(File.read('spec/support/project.json'))
+    end
+    let(:parsed_json) do
+      JSON.parse(AmsaMason::Adapter.new(serializer).as_json)
+    end
+    it 'has keys for field names and default value values' do
+      expect(parsed_json['@controls']['is:update-project']['template']).
+        to eq(action_with_template['@controls']['is:update-project']['template'])
     end
   end
 end

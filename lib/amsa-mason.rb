@@ -1,6 +1,7 @@
-require "amsa-mason/version"
-require "active_model_serializers"
-require "socket"
+require 'amsa-mason/version'
+require 'active_model_serializers'
+require 'yaml'
+require 'socket'
 
 module AmsaMason
   class Adapter < ::ActiveModel::Serializer::Adapter::Base
@@ -24,10 +25,19 @@ module AmsaMason
     end
     def additional_properties
       {
-        "@controls" => controls
-      }
+        "@controls" => controls_and_maybe_templates
+      }.merge!(
+        app_profile_as_hash
+      )
     end
-    def controls
+    def app_profile_as_hash
+      full_profile = YAML.load(File.read('spec/support/api_profile.yml'))
+      if instance_options.include?(:minimal)
+        full_profile = full_profile.except('@meta')
+      end
+      full_profile
+    end
+    def controls_and_maybe_templates
       {
         self: {
           href: "#{hostname}/#{resource_name_of(serializer.object)}/#{serializer.object.id}"

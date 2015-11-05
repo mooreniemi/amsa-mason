@@ -1,0 +1,14 @@
+'@namespaces':
+  is:
+    name: "http://elfisk.dk/mason/issue-tracker/reltypes.html#"
+'@meta':
+  '@controls':
+    documentation:
+      title:
+        "Documentation of Mason media type (hosted on GitHub)."
+      href:
+        "https://github.com/JornWildt/Mason"
+  '@title':
+      "Common resource data for IssueTracker Demo"
+  '@description':
+      "This resource contains common information for all resources (such as common links, implementation and owner details). [This application restarts in 14:59 minutes]"
